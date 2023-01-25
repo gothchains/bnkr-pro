@@ -1,0 +1,1 @@
+document.getElementById("sc").textContent = "local script bundle: WORKING"
