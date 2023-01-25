@@ -1,8 +1,7 @@
-/node-modules/
-node-modules
+/node-modules/*
 .replit
 replit.nix
 package-lock.json
 package.json
-/.upm
+/.upm/*
 .breakpoints
