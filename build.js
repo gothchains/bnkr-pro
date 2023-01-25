@@ -27,6 +27,7 @@ async function build(){
 		files[i] = files[i].split(__dirname.replace(/\\/g, "/")+"/"+bunker)[1];
 	}
 	for(let i in files){
+		console.log(files[i]);
 		if(files[i].split(".")[files[i].split(".").length-1] != "html"){
 			continue;
 		}
