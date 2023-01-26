@@ -17,5 +17,12 @@ module.exports = {
         "type": "redirect",
         "target": "https://classroom.google.com/u/2"
     },
-    "minifyJS": true
+    "minifyJS": true,
+    "minifyCSS": true,
+    "htmlOptions": {
+        "collapseWhitespace": true,
+        "removeComments": true,
+        "sortClassName": true,
+        "useShortDoctype": true
+    }
 }

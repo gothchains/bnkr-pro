@@ -4,7 +4,7 @@
 ### Features
 - Over 5 different launching methods: file, about:blank, and a few secret ones, including one that doesn't even require a single file.
 - Stealth: Employing the latest and greatest techniques and failsafes to keep you hidden no matter what.
-- Exploit Manager: Easily discover and apply the netwest cracks and exploits from the unblocking community, so that you can use your computer to the fullest potential. All without technical knowlege.
+- Exploit Manager: Easily discover and apply the newest cracks and exploits from the unblocking community, so that you can use your computer to the fullest potential. All without technical knowlege.
 - Game Assortment: A game library so good you'll continue to browse, even after you unblock your entire device.
 - Customizable: Employ the newest compiling procedure so you can tweak anything to your liking.
 - Size: Bunker PRO is a single HTML file less than a tiny 5KB!

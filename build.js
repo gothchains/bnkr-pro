@@ -3,6 +3,7 @@ const { JSDOM } = jsdom;
 var UglifyJS = require("uglify-js");
 const fs = require("fs");
 const axios = require("axios");
+var minify = require('html-minifier').minify;
 const fsp = require('fs').promises;
 const path = require('path');
 const config = require("./config");
@@ -162,7 +163,7 @@ async function build(){
 		}
 		njs=njs.code;
 	}
-	
+
 	nav.innerHTML = njs;
 	dom.window.document.body.appendChild(nav);
 
@@ -173,6 +174,13 @@ async function build(){
 	
 	let raw = "<!DOCTYPE html>"+dom.serialize();
 	console.log(`Finished building to 'index.html'. Total size: ${raw.length/1000}kb`);
-	fs.writeFileSync(__dirname+"/index.html", raw);
+	fs.writeFileSync(__dirname+"/index.html", minify(raw, {
+		minifyCSS: config.minifyCSS,
+		collapseWhitespace: config.htmlOptions.collapseWhitespace,
+		removeComments: config.htmlOptions.removeComments,
+		sortClassName: config.htmlOptions.sortClassName,
+		useShortDoctype: config.htmlOptions.useShortDoctype
+	}));
+	//add to config
 }
 build();
