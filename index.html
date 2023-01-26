@@ -1,61 +1,7 @@
-<html><head>
-		<title>$config.title</title>
-	</head>
+<!DOCTYPE html><html><head>
+		<title>bingleshit</title>
+	<link rel="icon" href="https://favicon.io/assets/static/favicon.b9532cc.ed88c65f76fa003989a0c683d668c765.png"></head>
 	<body><p id="t">Scripts failed to bundle</p>
 	<a onclick="clearNavigation('/test/test.html');">Go to pro</a>
-	<script>document.getElementById("t").textContent = "Scripts bundled";</script>
-<script>window.navigation = {"/index.html":["\n\t\t&lt;title&gt;$config.title&lt;/title&gt;\n\t","&lt;p id=\"t\"&gt;Scripts failed to bundle&lt;/p&gt;\n\t&lt;a onclick=\"clearNavigation('/test/test.html');\"&gt;Go to pro&lt;/a&gt;\n\t&lt;script&gt;document.getElementById(\"t\").textContent = \"Scripts bundled\";&lt;/script&gt;\n"],"/test/test.html":["\n        &lt;title&gt;headOverrite&lt;/title&gt;\n        &lt;style&gt;#red{\n    color: red;\n}&lt;/style&gt;\n        &lt;style&gt;#blue{\n\tcolor:blue;\n}&lt;/style&gt;\n    ","\n        &lt;p&gt;document.head write (check title)&lt;/p&gt;\n        &lt;p id=\"red\"&gt;local style bundling: (target: red)&lt;/p&gt;\n        &lt;p id=\"blue\"&gt;remote style bundling (target: blue)&lt;/p&gt;\n        &lt;p id=\"sc\"&gt;local script bundle: notworking&lt;/p&gt;\n        &lt;p id=\"rsc\"&gt;remote script bundling: notworking&lt;/p&gt;\n        &lt;a onclick=\"clearNavigation('/index.html');\"&gt;Working link with slash&lt;/a&gt;\n        &lt;a onclick=\"clearNavigation('index.html');\"&gt;Working link without slash&lt;/a&gt;\n        &lt;a onclick=\"clearNavigation('balleating');\"&gt;Nonworking link&lt;/a&gt;\n        &lt;script&gt;document.getElementById(\"sc\").textContent = \"local script bundle: WORKING\"&lt;/script&gt;\n        &lt;script&gt;document.getElementById(\"rsc\").textContent = \"local script bundle: WORKING\"&lt;/script&gt;\n    \n"]}</script><script>function replaceLast(find, replace, string) {
-    var lastIndex = string.lastIndexOf(find);
-    
-    if (lastIndex === -1) {
-        return string;
-    }
-    
-    var beginString = string.substring(0, lastIndex);
-    var endString = string.substring(lastIndex + find.length);
-    
-    return beginString + replace + endString;
-}
-function nodeScriptReplace(node) {
-    if ( nodeScriptIs(node) === true ) {
-            node.parentNode.replaceChild( nodeScriptClone(node) , node );
-    }
-    else {
-            var i = -1, children = node.childNodes;
-            while ( ++i < children.length ) {
-                  nodeScriptReplace( children[i] );
-            }
-    }
-
-    return node;
-}
-function nodeScriptClone(node){
-    var script  = document.createElement("script");
-    script.text = node.innerHTML;
-
-    var i = -1, attrs = node.attributes, attr;
-    while ( ++i < attrs.length ) {                                    
-          script.setAttribute( (attr = attrs[i]).name, attr.value );
-    }
-    return script;
-}
-
-function nodeScriptIs(node) {
-    return node.tagName === 'SCRIPT';
-}
-function clearNavigation(h){
-    if(h[0]!="/")h="/"+h;
-    if(window.navigation[h] == undefined){
-        alert("Link is invalid");
-        return false;
-    }
-    h = window.navigation[h]
-    let p = document.createElement("p");
-    p.innerHTML = h[0];
-    document.head.innerHTML = p.textContent;
-    p.innerHTML = h[1];
-    document.body.innerHTML= p.textContent;
-    nodeScriptReplace(document.body);
-    delete p;
-    return true;
-}</script></body></html>
+	<script>document.getElementById("t").textContent="Scripts bundled";</script>
+<script>window.navigation = {"/index.html":["\n\t\t&lt;title&gt;bingleshit&lt;/title&gt;\n\t&lt;link rel=\"icon\" href=\"https://favicon.io/assets/static/favicon.b9532cc.ed88c65f76fa003989a0c683d668c765.png\"&gt;","&lt;p id=\"t\"&gt;Scripts failed to bundle&lt;/p&gt;\n\t&lt;a onclick=\"clearNavigation('/test/test.html');\"&gt;Go to pro&lt;/a&gt;\n\t&lt;script&gt;document.getElementById(\"t\").textContent=\"Scripts bundled\";&lt;/script&gt;\n"],"/test/test.html":["\n        &lt;title&gt;bingleshit&lt;/title&gt;\n        &lt;style&gt;#red{\n    color: red;\n}&lt;/style&gt;\n        &lt;style&gt;#blue{\n\tcolor:blue;\n}&lt;/style&gt;\n    &lt;link rel=\"icon\" href=\"https://favicon.io/assets/static/favicon.b9532cc.ed88c65f76fa003989a0c683d668c765.png\"&gt;","\n        &lt;p&gt;document.head write (check title)&lt;/p&gt;\n        &lt;p id=\"red\"&gt;local style bundling: (target: red)&lt;/p&gt;\n        &lt;p id=\"blue\"&gt;remote style bundling (target: blue)&lt;/p&gt;\n        &lt;p id=\"sc\"&gt;local script bundle: notworking&lt;/p&gt;\n        &lt;p id=\"rsc\"&gt;remote script bundling: notworking&lt;/p&gt;\n        &lt;a onclick=\"clearNavigation('/index.html');\"&gt;Working link with slash&lt;/a&gt;\n        &lt;a onclick=\"clearNavigation('index.html');\"&gt;Working link without slash&lt;/a&gt;\n        &lt;a onclick=\"clearNavigation('balleating');\"&gt;Nonworking link&lt;/a&gt;\n        &lt;script&gt;document.getElementById(\"sc\").textContent=\"local script bundle: WORKING\";&lt;/script&gt;\n        &lt;script&gt;document.getElementById(\"rsc\").textContent=\"local script bundle: WORKING\";&lt;/script&gt;\n    \n"]}</script><script>function replaceLast(e,n,t){var r=t.lastIndexOf(e);return-1===r?t:t.substring(0,r)+n+t.substring(r+e.length)}function nodeScriptReplace(e){if(!0===nodeScriptIs(e))e.parentNode.replaceChild(nodeScriptClone(e),e);else for(var n=-1,t=e.childNodes;++n<t.length;)nodeScriptReplace(t[n]);return e}function nodeScriptClone(e){for(var n,t=document.createElement("script"),r=(t.text=e.innerHTML,-1),i=e.attributes;++r<i.length;)t.setAttribute((n=i[r]).name,n.value);return t}function nodeScriptIs(e){return"SCRIPT"===e.tagName}function clearNavigation(e){if("/"!=e[0]&&(e="/"+e),null==window.navigation[e])return alert("Link is invalid"),!1;e=window.navigation[e];var n=document.createElement("p");return n.innerHTML=e[0],document.head.innerHTML=n.textContent,n.innerHTML=e[1],document.body.innerHTML=n.textContent,nodeScriptReplace(document.body),delete n,!0}</script><script>window.config = {"forceTitle":"bingleshit","forceFavicon":{"type":"remote","path":"https://favicon.io/assets/static/favicon.b9532cc.ed88c65f76fa003989a0c683d668c765.png"},"3rdPartyResources":{"css":true,"js":true},"defaultPanic":["Control","Shift","Q"],"defaultPanicAction":{"type":"redirect","target":"https://classroom.google.com/u/2"}}</script></body></html>

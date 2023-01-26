@@ -1,9 +1,11 @@
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
+var UglifyJS = require("uglify-js");
 const fs = require("fs");
 const axios = require("axios");
 const fsp = require('fs').promises;
 const path = require('path');
+const config = require("./config");
 async function walk(dir) {
     let files = await fsp.readdir(dir);
     files = await Promise.all(files.map(async file => {
@@ -20,6 +22,7 @@ async function build(){
 	if(bunker == undefined){
 		bunker = "bunker";
 	}
+	console.log(`Building from path '${bunker}' with config: 'config.js'`);
 	let htmls = [];
 	let files = await walk(__dirname+"/"+bunker);
 	for(let i in files){
@@ -27,7 +30,12 @@ async function build(){
 		files[i] = files[i].split(__dirname.replace(/\\/g, "/")+"/"+bunker)[1];
 	}
 	for(let i in files){
-		console.log(files[i]);
+		let lp = files[i].replace("/","").split("/")
+		lp.pop();
+		lp=lp.join("/");
+		if(lp!=""){
+			lp="/"+lp+"/";
+		}
 		if(files[i].split(".")[files[i].split(".").length-1] != "html"){
 			continue;
 		}
@@ -41,28 +49,33 @@ async function build(){
 		for(let i=0;i<scrs.length;i++){
 			let content;
 			if(scrs[i].src.indexOf("http") != 0){
-				let src = __dirname+"/"+bunker+"/"+scrs[i].src;
+				let src = __dirname+"/"+bunker+"/"+lp+scrs[i].src;
 				content = fs.readFileSync(src, "utf-8");
 			} else {
-				content = (await axios.get(scrs[i].src)).data;
+				if(config["3rdPartyResources"].js) content = (await axios.get(scrs[i].src)).data;
 			}
+			content = UglifyJS.minify(content);
+			if(content.error != undefined){
+				throw content.error;
+			}
+			content = content.code;
 			scrs[i].removeAttribute("src");
 			scrs[i].innerHTML = content;
 		}
 		delete scrs;
 	
+		//css inlining
 		let css = document.getElementsByTagName("link");
-		console.log("css length ", css.length);
 		let toReplace = [];
 		for(let i=0;i<css.length;i++){
-			console.log("bingle");
 			if(css[i].rel == "stylesheet"){
 				let style = document.createElement("style");
+				let content;
 				if(css[i].href.indexOf("http") != 0){
-					let src = __dirname+"/"+bunker+"/"+css[i].href;
+					let src = __dirname+"/"+bunker+"/"+lp+css[i].href;
 					content = fs.readFileSync(src, "utf-8");
 				} else {
-					content = (await axios.get(css[i].href)).data;
+					if(config["3rdPartyResources"].css) content = (await axios.get(css[i].href)).data;
 				}
 				style.innerHTML = content;
 				toReplace.push([css[i], style]);
@@ -80,6 +93,30 @@ async function build(){
 				as[i].removeAttribute("href");
 			}
 		}
+		
+		//config forcer
+
+		if(config.forceTitle != ""){
+			document.title = config.forceTitle;
+		}
+		if(config.forceFavicon.path != ""){
+			let icons = document.getElementsByTagName("link");
+			let cd = false;
+			for(let i=0;i<icons.length;i++){
+				if(icons[i].rel == "icon"){
+					icons[i].href = config.forceFavicon.path;
+					cd=true;
+				}
+			}
+			if(!cd){
+				let fav = document.createElement("link");
+				fav.rel = "icon",
+				fav.href= config.forceFavicon.path;
+				document.head.appendChild(fav);
+				delete fav;
+			}
+		}
+
 		htmls[files[i]] = dom.serialize();
 	}
 
@@ -96,12 +133,29 @@ async function build(){
 		console.log(`NAVIGATION CACHE: ${i} (SIZE:${html.length})`);
 	}
 	let dom = new JSDOM(htmls["/index.html"]);
+
+	//navigation data import
 	let nav = dom.window.document.createElement("script");
 	nav.innerHTML = `window.navigation = ${JSON.stringify(navigation)}`;
 	dom.window.document.body.appendChild(nav);
+
+	//navigation handler import
 	nav = dom.window.document.createElement("script");
-	nav.innerHTML = fs.readFileSync(__dirname+"/nav.js", "utf-8");
+	let njs = fs.readFileSync(__dirname+"/nav.js", "utf-8");
+	njs = UglifyJS.minify(njs);
+	if(njs.error != undefined){
+		throw njs.error;
+	}
+	nav.innerHTML = njs.code;
 	dom.window.document.body.appendChild(nav);
-	fs.writeFileSync(__dirname+"/index.html", dom.serialize());
+
+	//config import
+	nav = dom.window.document.createElement("script");
+	nav.innerHTML = `window.config = ${JSON.stringify(config)}`;
+	dom.window.document.body.appendChild(nav);
+	
+	let raw = "<!DOCTYPE html>"+dom.serialize();
+	console.log(`Finished building to 'index.html'. Total size: ${raw.length/1000}kb`);
+	fs.writeFileSync(__dirname+"/index.html", raw);
 }
 build();
