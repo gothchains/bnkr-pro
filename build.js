@@ -52,9 +52,15 @@ async function build(){
 				let src = __dirname+"/"+bunker+"/"+lp+scrs[i].src;
 				content = fs.readFileSync(src, "utf-8");
 			} else {
-				if(config["3rdPartyResources"].js) content = (await axios.get(scrs[i].src)).data;
+				try{
+					if(config["3rdPartyResources"].js) content = (await axios.get(scrs[i].src)).data;
+				}catch(e){
+					console.log("Failed to fetch remote resource: "+e);
+					return false;
+				}
+				
 			}
-			if(config.minifyJS){
+			if(config.minifyJS && content != undefined){
 				content = UglifyJS.minify(content);
 				if(content.error != undefined){
 					throw content.error;
@@ -77,7 +83,12 @@ async function build(){
 					let src = __dirname+"/"+bunker+"/"+lp+css[i].href;
 					content = fs.readFileSync(src, "utf-8");
 				} else {
-					if(config["3rdPartyResources"].css) content = (await axios.get(css[i].href)).data;
+					try{
+						if(config["3rdPartyResources"].css) content = (await axios.get(css[i].href)).data;
+					}catch(e){
+						console.log("Failed to fetch remote resource: "+e);
+						return false;
+					}
 				}
 				style.innerHTML = content;
 				toReplace.push([css[i], style]);

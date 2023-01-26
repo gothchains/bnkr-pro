@@ -1,12 +1,12 @@
 module.exports = {
-    "forceTitle": "bingleshit",
+    "forceTitle": "",
     "forceFavicon": {
         "type": "remote",
-        "path": "https://favicon.io/assets/static/favicon.b9532cc.ed88c65f76fa003989a0c683d668c765.png"
+        "path": ""
     },
     "3rdPartyResources": {
-        "css": true,
-        "js": true
+        "css": false,
+        "js": false
     },
     "defaultPanic": [
         "Control",
