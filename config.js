@@ -16,5 +16,6 @@ module.exports = {
     "defaultPanicAction":{
         "type": "redirect",
         "target": "https://classroom.google.com/u/2"
-    }
+    },
+    "minifyJS": true
 }

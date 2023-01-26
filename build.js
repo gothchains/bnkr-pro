@@ -54,11 +54,13 @@ async function build(){
 			} else {
 				if(config["3rdPartyResources"].js) content = (await axios.get(scrs[i].src)).data;
 			}
-			content = UglifyJS.minify(content);
-			if(content.error != undefined){
-				throw content.error;
+			if(config.minifyJS){
+				content = UglifyJS.minify(content);
+				if(content.error != undefined){
+					throw content.error;
+				}
+				content = content.code;
 			}
-			content = content.code;
 			scrs[i].removeAttribute("src");
 			scrs[i].innerHTML = content;
 		}
@@ -142,11 +144,15 @@ async function build(){
 	//navigation handler import
 	nav = dom.window.document.createElement("script");
 	let njs = fs.readFileSync(__dirname+"/nav.js", "utf-8");
-	njs = UglifyJS.minify(njs);
-	if(njs.error != undefined){
-		throw njs.error;
+	if(config.minifyJS){
+		njs = UglifyJS.minify(njs);
+		if(njs.error != undefined){
+			throw njs.error;
+		}
+		njs=njs.code;
 	}
-	nav.innerHTML = njs.code;
+	
+	nav.innerHTML = njs;
 	dom.window.document.body.appendChild(nav);
 
 	//config import
