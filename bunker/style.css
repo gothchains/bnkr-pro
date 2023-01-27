@@ -1,3 +1,90 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    height: 100%;
+    width: 100%;
+    background-color: black;
+}
+h1{
+    font-family: Arial, Helvetica, sans-serif;
+    color: white; 
+    margin: 0px;  
+}
+p{
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0px;
+}
+.hd{
+    display: flex;
+    align-items: center;
+    padding: 1em;
+}
+.hd p{
+    margin-top: 0.2em;
+    background: linear-gradient(328deg, rgba(255,0,172,1) 0%, rgba(255,0,0,1) 100%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    display: inline-block;
+}
+.hd h1{
+    letter-spacing: 0.05em;
+    font-size: 2.3em;
+}
+.hd div{
+    margin-right: 2em;
+}
+.hd a{
+    color: white;
+    font-size: 1.3em;
+    text-decoration: none;
+    font-family: Arial, Helvetica, sans-serif;
+    position: relative;
+    margin-right: 1em;
+}
+.hd a::before {
+    content: "";
+    position: absolute;
+    top: calc(100% + 3px);
+    width: 100%;
+    left: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(328deg, rgb(255, 0, 234), rgba(255,0,0,1));
+    background-size: 200% 200%;
+}
+.hd a:hover::before{
+    content: "";
+    animation: gradient 3s ease infinite;
+    position: absolute;
+    top: calc(100% + 3px);
+    width: 100%;
+    left: 0;
+    height: 2px;
+    border-radius: 2px;
+    background: linear-gradient(328deg, rgba(255,0,244) 0%, rgba(255,0,0,1));
+    background-size: 200% 200%;
+}
 #pro{
-    
+    letter-spacing: normal;
+    padding-left: 0.13em;
+    padding-right: 0.13em;
+    border-radius: 3px;
+    margin: 0px;
+    color: white;
+    font-family: Arial, Helvetica, sans-serif;
+    background: rgb(255,0,172);
+    background: linear-gradient(138deg, rgba(255,0,172,1), rgba(255,0,0,1));
+}
+@keyframes gradient {
+	0% {
+		background-position: 0% 50%;
+	}
+	50% {
+		background-position: 100% 50%;
+	}
+	100% {
+		background-position: 0% 50%;
+	}
 }
