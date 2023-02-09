@@ -1,12 +1,15 @@
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 var UglifyJS = require("uglify-js");
+var md5 = require('md5');
+const version = "0.0-prebuild";
 const fs = require("fs");
 const axios = require("axios");
 var minify = require('html-minifier').minify;
 const fsp = require('fs').promises;
 const path = require('path');
 const config = require("./config");
+let buildId = parseInt(fs.readFileSync(__dirname+"/builds.txt", "utf-8"));
 async function walk(dir) {
     let files = await fsp.readdir(dir);
     files = await Promise.all(files.map(async file => {
@@ -103,8 +106,9 @@ async function build(){
 		let as = document.getElementsByTagName("a");
 		for(let i=0;i<as.length;i++){
 			if(as[i].href.indexOf("http") != 0){
-				as[i].setAttribute("onclick", `clearNavigation('${as[i].href}');`);
+				as[i].setAttribute("onclick", `document.body.style.opacity = 0;setTimeout(()=>{clearNavigation('${as[i].href}');document.body.style.opacity = 1;}, 300);`);
 				as[i].removeAttribute("href");
+				//as[i].setAttribute("href", "#");
 			}
 		}
 		
@@ -147,6 +151,9 @@ async function build(){
 		console.log(`NAVIGATION CACHE: ${i} (SIZE:${html.length})`);
 	}
 	let dom = new JSDOM(htmls["/index.html"]);
+	
+	//versioning inject
+	dom.window.document.getElementById("v").textContent = "Bunker PRO version-"+version+" "+buildId+"-"+md5(buildId);
 
 	//navigation data import
 	let nav = dom.window.document.createElement("script");
@@ -173,14 +180,15 @@ async function build(){
 	dom.window.document.body.appendChild(nav);
 	
 	let raw = "<!DOCTYPE html>"+dom.serialize();
-	console.log(`Finished building to 'index.html'. Total size: ${raw.length/1000}kb`);
-	fs.writeFileSync(__dirname+"/index.html", minify(raw, {
+	raw = minify(raw, {
 		minifyCSS: config.minifyCSS,
 		collapseWhitespace: config.htmlOptions.collapseWhitespace,
 		removeComments: config.htmlOptions.removeComments,
 		sortClassName: config.htmlOptions.sortClassName,
 		useShortDoctype: config.htmlOptions.useShortDoctype
-	}));
-	//add to config
+	});
+	fs.writeFileSync(__dirname+"/index.html", raw);
+	fs.writeFileSync(__dirname+"/builds.txt", (buildId+1)+"");
+	console.log(`Finished building to 'index.html'. Total size: ${raw.length/1000}kb`);
 }
 build();

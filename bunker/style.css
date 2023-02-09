@@ -4,6 +4,7 @@ body{
     height: 100%;
     width: 100%;
     background-color: black;
+    transition: opacity 300ms;
 }
 body[bg]{
     background-image: url("https://picstatio.com/download/2560x1440/e754a7/geometrical-triangles-abstract.jpg");
@@ -101,18 +102,15 @@ p{
     border-radius: 0.3em;
     padding: 0.3em;
     width: max-content;
-    width: 6.6em;
-}
-.vert-bar-nav>div:not(.vert-bar-nav>div:first-child){
-    margin-top: 0.5em;
+    width: 2.6em;
 }
 .vert-bar-nav>div{
     width: max-content;
     display: inline-block;
 }
 .navsvg{
-    width: 3em;
-    height: 3em;
+    width: 2.5em;
+    height: 2.5em;
 }
 .bottom-versioning{
     position: absolute;
