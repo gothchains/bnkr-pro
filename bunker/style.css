@@ -5,6 +5,11 @@ body{
     width: 100%;
     background-color: black;
 }
+body[bg]{
+    background-image: url("https://picstatio.com/download/2560x1440/e754a7/geometrical-triangles-abstract.jpg");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 h1{
     font-family: Arial, Helvetica, sans-serif;
     color: white; 
@@ -87,4 +92,41 @@ p{
 	100% {
 		background-position: 0% 50%;
 	}
+}
+.vert-bar-nav{
+    position: absolute;
+    top: 0.7em;
+    left: 0.7em;
+    background-color:rgba(255, 255, 255, 0.233);
+    border-radius: 0.3em;
+    padding: 0.3em;
+    width: max-content;
+    width: 6.6em;
+}
+.vert-bar-nav>div:not(.vert-bar-nav>div:first-child){
+    margin-top: 0.5em;
+}
+.vert-bar-nav>div{
+    width: max-content;
+    display: inline-block;
+}
+.navsvg{
+    width: 3em;
+    height: 3em;
+}
+.bottom-versioning{
+    position: absolute;
+    bottom: 0px;
+    width: calc(100vw - 2em);
+    display: flex;
+    justify-content: space-between;
+    margin-left: 1em;
+    margin-right: 1em;
+}
+.bottom-versioning p{
+    font-family: consolas, Arial, Helvetica, sans-serif;
+}
+.bottom-versioning #v{
+    font-family: monospace;
+    font-size: 1em;
 }
