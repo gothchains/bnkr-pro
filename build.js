@@ -23,10 +23,14 @@ async function walk(dir) {
 }
 async function build(){
 	let bunker = process.argv[2];
+	let dist = process.argv[3];
 	if(bunker == undefined){
-		bunker = "bunker";
+		bunker = "src";
 	}
-	console.log(`Building from path '${bunker}' with config: 'config.js'`);
+	if(dist == undefined){
+		dist = "dist"
+	}
+	console.log(`Building from path '${bunker}' with config: 'config.js' to output '${dist}'`);
 	let htmls = [];
 	let files = await walk(__dirname+"/"+bunker);
 	for(let i in files){
@@ -153,7 +157,7 @@ async function build(){
 	let dom = new JSDOM(htmls["/index.html"]);
 	
 	//versioning inject
-	dom.window.document.getElementById("v").textContent = "Bunker PRO version-"+version+" "+buildId+"-"+md5(buildId);
+	dom.window.document.getElementById("v").textContent = "Bunker PRO version-"+version+" "+buildId+"-"+md5(buildId)+" on "+new Date().toLocaleString();
 
 	//navigation data import
 	let nav = dom.window.document.createElement("script");
@@ -188,8 +192,8 @@ async function build(){
 		sortClassName: config.htmlOptions.sortClassName,
 		useShortDoctype: config.htmlOptions.useShortDoctype
 	});
-	fs.writeFileSync(__dirname+"/index.html", raw);
+	fs.writeFileSync(__dirname+"/"+dist+"/index.html", raw);
 	fs.writeFileSync(__dirname+"/builds.txt", (buildId+1)+"");
-	console.log(`Finished building to 'index.html'. Total size: ${raw.length/1000}kb`);
+	console.log(`Finished building to '${dist}/index.html'. Total size: ${raw.length/1000}kb`);
 }
 build();
