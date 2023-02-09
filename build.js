@@ -175,6 +175,7 @@ async function build(){
 	dom.window.document.body.appendChild(nav);
 
 	//config import
+	//test
 	nav = dom.window.document.createElement("script");
 	nav.innerHTML = `window.config = ${JSON.stringify(config)}`;
 	dom.window.document.body.appendChild(nav);
