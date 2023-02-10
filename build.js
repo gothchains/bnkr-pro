@@ -56,6 +56,7 @@ async function build(){
 		let scrs = document.getElementsByTagName("script");
 		for(let i=0;i<scrs.length;i++){
 			let content;
+			if(scrs[i].src == "") continue;
 			if(scrs[i].src.indexOf("http") != 0){
 				let src = __dirname+"/"+bunker+"/"+lp+scrs[i].src;
 				content = fs.readFileSync(src, "utf-8");
@@ -157,6 +158,13 @@ async function build(){
 	let dom = new JSDOM(htmls["/index.html"]);
 	
 	//versioning inject
+	let vcfg = {
+		"version": version,
+		"buildId": buildId,
+		"checksum": md5(buildId),
+		"buildDate": new Date().toLocaleString()
+	}
+
 	dom.window.document.getElementById("v").textContent = "Bunker PRO version-"+version+" "+buildId+"-"+md5(buildId)+" on "+new Date().toLocaleString();
 
 	//navigation data import
@@ -178,13 +186,29 @@ async function build(){
 	nav.innerHTML = njs;
 	dom.window.document.body.appendChild(nav);
 
-	//config import
-	//test
+	//toast notif inject
 	nav = dom.window.document.createElement("script");
-	nav.innerHTML = `window.config = ${JSON.stringify(config)}`;
+	njs = fs.readFileSync(__dirname+"/toast.js", "utf-8");
+	if(config.minifyJS){
+		njs = UglifyJS.minify(njs);
+		if(njs.error != undefined){
+			throw njs.error;
+		}
+		njs=njs.code;
+	}
+
+	nav.innerHTML = njs;
 	dom.window.document.body.appendChild(nav);
-	
-	let raw = "<!DOCTYPE html>"+dom.serialize();
+
+	nav = dom.window.document.createElement("style");
+	nav.innerHTML = `a[onclick]{cursor:pointer;}`;
+	dom.window.document.head.appendChild(nav);
+
+	//config import
+	nav = dom.window.document.createElement("script");
+	nav.innerHTML = `window.config = ${JSON.stringify(Object.assign(config, vcfg))}`;
+	dom.window.document.body.appendChild(nav);
+	let raw = dom.serialize();
 	raw = minify(raw, {
 		minifyCSS: config.minifyCSS,
 		collapseWhitespace: config.htmlOptions.collapseWhitespace,

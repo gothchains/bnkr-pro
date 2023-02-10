@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div style="padding: 1em;">
+            <h1 id="vn">Version ID</h1>
+            <p id="bn">Build Number Build Checksum</p>
+            <a href="index.html">Back to index</a>
+        </div>
+        <script>
+            document.getElementById("vn").textContent = window.config.version;
+            document.getElementById("bn").textContent = config.buildId+" "+config.checksum+" "+config.buildDate
+        </script>
+    </body>
+</html>
