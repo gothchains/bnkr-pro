@@ -9,6 +9,7 @@
 - Customizable: Employ the newest compiling procedure so you can tweak anything to your liking.
 - Size: Bunker PRO is a single HTML file less than a tiny 5KB!
 - File extension: Choose between a .html or a .htm to futher confuse spying eyes.
+- Navigation Virtualization: Bunker PRO uses the latest techniques to capture and suppress navigation events and uses PseudoBody™ technology.
 - Hidden from history: Completely hidden from history from launch to close.
 - Prebuilt options: Choose a simple install with just games, or pick a full featured Bunker PRO installation.
 - Active Community: With a expected development lifetime of a year, and a community support forever, Bunker PRO will last.

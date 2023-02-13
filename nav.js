@@ -1,41 +1,20 @@
 let keybindState = [];
 let quirkMode = 0;
-
-function replaceLast(find, replace, string) {
-    var lastIndex = string.lastIndexOf(find);
-    if (lastIndex === -1) {
-        return string;
-    }
-    var beginString = string.substring(0, lastIndex);
-    var endString = string.substring(lastIndex + find.length);
-    return beginString + replace + endString;
-}
-function nodeScriptReplace(node) {
-    if ( nodeScriptIs(node) === true ) {
-        node.parentNode.replaceChild( nodeScriptClone(node) , node );
-    }
-    else {
-        var i = -1, children = node.childNodes;
-        while ( ++i < children.length ) {
-                nodeScriptReplace( children[i] );
-        }
-    }
-    return node;
-}
-function nodeScriptClone(node){
-    var script  = document.createElement("script");
-    script.text = node.innerHTML;
-
-    var i = -1, attrs = node.attributes, attr;
-    while ( ++i < attrs.length ) {                                    
-          script.setAttribute( (attr = attrs[i]).name, attr.value );
-    }
-    return script;
-}
-
-function nodeScriptIs(node) {
-    return node.tagName === 'SCRIPT';
-}
+function executeScriptElements(containerElement) {
+    const scriptElements = containerElement.querySelectorAll("script");
+  
+    Array.from(scriptElements).forEach((scriptElement) => {
+      const clonedElement = document.createElement("script");
+  
+      Array.from(scriptElement.attributes).forEach((attribute) => {
+        clonedElement.setAttribute(attribute.name, attribute.value);
+      });
+      
+      clonedElement.text = scriptElement.text;
+  
+      scriptElement.parentNode.replaceChild(clonedElement, scriptElement);
+    });
+  }
 function clearNavigation(h){
     if(h[0]!="/")h="/"+h;
     if(window.navigation[h] == undefined){
@@ -46,12 +25,17 @@ function clearNavigation(h){
     let p = document.createElement("p");
     p.innerHTML = h[0];
     document.head.innerHTML = p.textContent;
+    let cmp = document.createElement("style");
+    cmp.innerHTML = window.navigation["/libs/ln.css"];
+    cmp.setAttribute("tracking-href", "navinjected-lib#lib/ln.css");
+    document.head.appendChild(cmp);
+    delete cmp;
     p.innerHTML = h[1];
-    document.body.innerHTML= p.textContent;
-    nodeScriptReplace(document.body);
+    document.getElementById("pseudobody").innerHTML= p.textContent;
     let nav = document.createElement("style");
 	nav.innerHTML = `a[onclick]{cursor:pointer;}`;
 	document.head.appendChild(nav);
+    executeScriptElements(document.getElementById("pseudobody"));
     delete p;
     return true;
 }
@@ -74,10 +58,17 @@ document.addEventListener("keyup", (e)=>{
 setInterval(()=>{
     // check quirk mode
     if(!quirkMode && document.compatMode == "BackCompat"){
-        Toastify({
-            text: "Possible Error Occured: Browser in QUIRKS mode",
-            duration: 5000
-        }).showToast();
+        const container = document.getElementById('ntf');
+        const notification = new LunaNotification(container, {
+            position: {
+                x: 'right',
+                y: 'top',
+            },
+            theme: "dark"
+        });
+        notification.notify('Possible Error: Document in Quirks Mode', {
+            duration: 2000,
+        });
         quirkMode=1;
     }
 }, 5000);

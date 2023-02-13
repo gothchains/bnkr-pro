@@ -57,6 +57,7 @@ async function build(){
 		for(let i=0;i<scrs.length;i++){
 			let content;
 			if(scrs[i].src == "") continue;
+			if(scrs[i].getAttribute("buildignore") == "true") continue;
 			if(scrs[i].src.indexOf("http") != 0){
 				let src = __dirname+"/"+bunker+"/"+lp+scrs[i].src;
 				content = fs.readFileSync(src, "utf-8");
@@ -76,6 +77,7 @@ async function build(){
 				}
 				content = content.code;
 			}
+			if(config.debuggingShowInlinedOrigin) scrs[i].setAttribute("tracking-src", scrs[i].src);
 			scrs[i].removeAttribute("src");
 			scrs[i].innerHTML = content;
 		}
@@ -100,6 +102,7 @@ async function build(){
 					}
 				}
 				style.innerHTML = content;
+				if(config.debuggingShowInlinedOrigin) style.setAttribute("tracking-href", css[i].href);
 				toReplace.push([css[i], style]);
 			}
 		}
@@ -152,9 +155,14 @@ async function build(){
 		let dom = new JSDOM(html);
 		navigation[i] = [];
 		navigation[i][0] =  dom.window.document.head.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		navigation[i][1] =  dom.window.document.body.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		if(i == "/index.html"){
+			navigation[i][1] =  dom.window.document.getElementById("pseudobody").innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		} else {
+			navigation[i][1] =  dom.window.document.body.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		}
 		console.log(`NAVIGATION CACHE: ${i} (SIZE:${html.length})`);
 	}
+	navigation["/libs/ln.css"] = fs.readFileSync(__dirname+"/"+bunker+"/libs/ln.css", "utf-8");
 	let dom = new JSDOM(htmls["/index.html"]);
 	
 	//versioning inject
@@ -186,19 +194,6 @@ async function build(){
 	nav.innerHTML = njs;
 	dom.window.document.body.appendChild(nav);
 
-	//toast notif inject
-	nav = dom.window.document.createElement("script");
-	njs = fs.readFileSync(__dirname+"/toast.js", "utf-8");
-	if(config.minifyJS){
-		njs = UglifyJS.minify(njs);
-		if(njs.error != undefined){
-			throw njs.error;
-		}
-		njs=njs.code;
-	}
-
-	nav.innerHTML = njs;
-	dom.window.document.body.appendChild(nav);
 
 	nav = dom.window.document.createElement("style");
 	nav.innerHTML = `a[onclick]{cursor:pointer;}`;
