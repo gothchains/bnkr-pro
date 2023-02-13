@@ -11,32 +11,6 @@
 			<div id="ntf"></div>
 			<script src="libs/notif.js"></script>
 			<script src="libs/cmd.js"></script>
-			<script>
-				const container = document.getElementById("cmdho");
-				const commandPalette = new LunaCommandPalette(container, {
-				placeholder: 'Type a command',
-				shortcut: 'Ctrl+Shift+P',
-				commands: [
-					{
-					title: 'Execute Panic',
-					shortcut: 'Ctrl+R',
-					handler(e) {
-						if (e && e.preventDefault) {
-						e.preventDefault()
-						}
-						location.reload()
-					}
-					},
-					{
-						title: "Fornite Balls",
-						handler(){
-							alert("boom");
-						}
-					}
-				]
-				});
-				//commandPalette.show();
-			</script>
 		</div>
 		<div id="pseudobody">
 			<div class="vert-bar-nav">

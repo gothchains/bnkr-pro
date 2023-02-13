@@ -21,6 +21,5 @@ module.exports = {
         "removeComments": true,
         "sortClassName": true,
         "useShortDoctype": true
-    },
-    "debuggingShowInlinedOrigin": true
+    }
 }

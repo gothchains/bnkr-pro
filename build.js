@@ -32,6 +32,7 @@ async function build(){
 	}
 	console.log(`Building from path '${bunker}' with config: 'config.js' to output '${dist}'`);
 	let htmls = [];
+	let contentCache = {};
 	let files = await walk(__dirname+"/"+bunker);
 	for(let i in files){
 		files[i] = files[i].replace(/\\/g, "/");
@@ -58,28 +59,32 @@ async function build(){
 			let content;
 			if(scrs[i].src == "") continue;
 			if(scrs[i].getAttribute("buildignore") == "true") continue;
-			if(scrs[i].src.indexOf("http") != 0){
-				let src = __dirname+"/"+bunker+"/"+lp+scrs[i].src;
-				content = fs.readFileSync(src, "utf-8");
-			} else {
-				try{
-					if(config["3rdPartyResources"].js) content = (await axios.get(scrs[i].src)).data;
-				}catch(e){
-					console.log("Failed to fetch remote resource: "+e);
-					return false;
+			if(contentCache[scrs[i].src] == undefined){
+				let content;
+				if(scrs[i].src.indexOf("http") != 0){
+					let src = __dirname+"/"+bunker+"/"+lp+scrs[i].src;
+					content = fs.readFileSync(src, "utf-8");
+				} else {
+					try{
+						if(config["3rdPartyResources"].js) content = (await axios.get(scrs[i].src)).data;
+					}catch(e){
+						console.log("Failed to fetch remote resource: "+e);
+						return false;
+					}
+					
 				}
-				
-			}
-			if(config.minifyJS && content != undefined){
-				content = UglifyJS.minify(content);
-				if(content.error != undefined){
-					throw content.error;
+				if(config.minifyJS && content != undefined){
+					content = UglifyJS.minify(content);
+					if(content.error != undefined){
+						throw content.error;
+					}
+					content = content.code;
 				}
-				content = content.code;
+				contentCache[scrs[i].src] = content;
 			}
-			if(config.debuggingShowInlinedOrigin) scrs[i].setAttribute("tracking-src", scrs[i].src);
+			scrs[i].setAttribute("tracking-src", scrs[i].src);
+			scrs[i].innerHTML = `((${scrs[i].src}))`;
 			scrs[i].removeAttribute("src");
-			scrs[i].innerHTML = content;
 		}
 		delete scrs;
 	
@@ -89,20 +94,23 @@ async function build(){
 		for(let i=0;i<css.length;i++){
 			if(css[i].rel == "stylesheet"){
 				let style = document.createElement("style");
-				let content;
-				if(css[i].href.indexOf("http") != 0){
-					let src = __dirname+"/"+bunker+"/"+lp+css[i].href;
-					content = fs.readFileSync(src, "utf-8");
-				} else {
-					try{
-						if(config["3rdPartyResources"].css) content = (await axios.get(css[i].href)).data;
-					}catch(e){
-						console.log("Failed to fetch remote resource: "+e);
-						return false;
+				if(contentCache[css[i].href] == undefined){
+					let content;
+					if(css[i].href.indexOf("http") != 0){
+						let src = __dirname+"/"+bunker+"/"+lp+css[i].href;
+						content = fs.readFileSync(src, "utf-8");
+					} else {
+						try{
+							if(config["3rdPartyResources"].css) content = (await axios.get(css[i].href)).data;
+						}catch(e){
+							console.log("Failed to fetch remote resource: "+e);
+							return false;
+						}
 					}
+					contentCache[css[i].href] = content;
 				}
-				style.innerHTML = content;
-				if(config.debuggingShowInlinedOrigin) style.setAttribute("tracking-href", css[i].href);
+				style.setAttribute("tracking-href", css[i].href);
+				style.innerHTML = `((${css[i].href}))`;
 				toReplace.push([css[i], style]);
 			}
 		}
@@ -178,6 +186,10 @@ async function build(){
 	//navigation data import
 	let nav = dom.window.document.createElement("script");
 	nav.innerHTML = `window.navigation = ${JSON.stringify(navigation)}`;
+	dom.window.document.body.appendChild(nav);
+
+	nav = dom.window.document.createElement("script");
+	nav.innerHTML = `window.contentCache = ${JSON.stringify(contentCache)}`;
 	dom.window.document.body.appendChild(nav);
 
 	//navigation handler import

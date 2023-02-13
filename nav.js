@@ -24,14 +24,22 @@ function clearNavigation(h){
     h = window.navigation[h];
     let p = document.createElement("p");
     p.innerHTML = h[0];
-    document.head.innerHTML = p.textContent;
+    let ct = p.textContent;
+    for(let i in window.contentCache){
+        ct = ct.replaceAll("(("+i+"))", window.contentCache[i]);
+    }
+    document.head.innerHTML = ct;
     let cmp = document.createElement("style");
     cmp.innerHTML = window.navigation["/libs/ln.css"];
-    cmp.setAttribute("tracking-href", "navinjected-lib#lib/ln.css");
+    cmp.setAttribute("tracking-href", "lib/ln.css");
     document.head.appendChild(cmp);
     delete cmp;
     p.innerHTML = h[1];
-    document.getElementById("pseudobody").innerHTML= p.textContent;
+    ct = p.textContent;
+    for(let i in window.contentCache){
+        ct = ct.replaceAll("(("+i+"))", window.contentCache[i]);
+    }
+    document.getElementById("pseudobody").innerHTML= ct;
     let nav = document.createElement("style");
 	nav.innerHTML = `a[onclick]{cursor:pointer;}`;
 	document.head.appendChild(nav);
@@ -72,3 +80,4 @@ setInterval(()=>{
         quirkMode=1;
     }
 }, 5000);
+clearNavigation("index.html");
