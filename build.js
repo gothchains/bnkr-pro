@@ -2,7 +2,7 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 var UglifyJS = require("uglify-js");
 var md5 = require('md5');
-const version = "0.0-prebuild";
+const version = "0.0-development";
 const fs = require("fs");
 const axios = require("axios");
 var minify = require('html-minifier').minify;
@@ -80,6 +80,7 @@ async function build(){
 					}
 					content = content.code;
 				}
+				console.log(`contentCache: ${scrs[i].src} (${content.length}b)`);
 				contentCache[scrs[i].src] = content;
 			}
 			scrs[i].setAttribute("tracking-src", scrs[i].src);
@@ -107,6 +108,7 @@ async function build(){
 							return false;
 						}
 					}
+					console.log(`contentCache: ${css[i].href} (${content.length}b)`);
 					contentCache[css[i].href] = content;
 				}
 				style.setAttribute("tracking-href", css[i].href);
@@ -125,9 +127,15 @@ async function build(){
 				as[i].setAttribute("onclick", `document.body.style.opacity = 0;setTimeout(()=>{clearNavigation('${as[i].href}');document.body.style.opacity = 1;}, 300);`);
 				as[i].removeAttribute("href");
 				//as[i].setAttribute("href", "#");
+			} else {
+				as[i].classList.add("ext_warn");
 			}
 		}
 		
+		if(files[i] == "/index.html"){
+			document.getElementById("v").textContent = "Bunker PRO version-"+version+" "+buildId+"-"+md5(buildId)+" on "+new Date().toLocaleString();
+		}
+
 		//config forcer
 
 		if(config.forceTitle != ""){
@@ -154,6 +162,20 @@ async function build(){
 		htmls[files[i]] = dom.serialize();
 	}
 
+	// force manual lib entry even if dynamic asset loader doesn't
+
+	let libs = [
+		"libs/cmd.js",
+		"libs/notif.js",
+		"libs/ln.css"
+	];
+
+	for(let i in libs){
+		let c = fs.readFileSync(__dirname+"/"+bunker+"/"+libs[i], "utf-8");
+		console.log(`contentCache: ${libs[i]} (${c.length}b)`);
+		contentCache[libs[i]] = c;
+	}
+
 	// html files compiled
 	// add compiled files to load on index.html
 
@@ -163,15 +185,10 @@ async function build(){
 		let dom = new JSDOM(html);
 		navigation[i] = [];
 		navigation[i][0] =  dom.window.document.head.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		if(i == "/index.html"){
-			navigation[i][1] =  dom.window.document.getElementById("pseudobody").innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		} else {
-			navigation[i][1] =  dom.window.document.body.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
-		}
-		console.log(`NAVIGATION CACHE: ${i} (SIZE:${html.length})`);
+		navigation[i][1] =  dom.window.document.body.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		console.log(`navigation: ${i} (${html.length}b)`);
 	}
-	navigation["/libs/ln.css"] = fs.readFileSync(__dirname+"/"+bunker+"/libs/ln.css", "utf-8");
-	let dom = new JSDOM(htmls["/index.html"]);
+	let dom = new JSDOM(htmls["/loader.html"]);
 	
 	//versioning inject
 	let vcfg = {
@@ -180,8 +197,6 @@ async function build(){
 		"checksum": md5(buildId),
 		"buildDate": new Date().toLocaleString()
 	}
-
-	dom.window.document.getElementById("v").textContent = "Bunker PRO version-"+version+" "+buildId+"-"+md5(buildId)+" on "+new Date().toLocaleString();
 
 	//navigation data import
 	let nav = dom.window.document.createElement("script");
