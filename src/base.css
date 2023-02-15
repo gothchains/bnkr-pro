@@ -1,0 +1,13 @@
+body{
+    margin: 0px;
+    padding: 1em;
+    transition: opacity 300ms;
+    background-color: black;
+}
+h1,h2,h3,h4,h5,p,a,li,label{
+    color: white;
+    font-family: Arial;
+}
+li a{
+    color: lightblue;
+}

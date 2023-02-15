@@ -52,7 +52,21 @@ async function build(){
 		const dom = new JSDOM(ht);
 		let document = dom.window.document;
 		let window = dom.window;
-	
+		
+		//page specified config
+		
+		let psc = {
+		    "external-warnings": true
+		}
+		
+		for(let i in psc){
+		    if(document.getElementsByName("buildconf-"+i).length > 0){
+		        psc[i] = document.getElementsByName("buildconf-"+i)[0].content;
+		        if(psc[i] == "true") psc[i]=true;
+		        if(psc[i] == "false") psc[i]=false;
+		    }
+		}
+		
 		//script inlining
 		let scrs = document.getElementsByTagName("script");
 		for(let i=0;i<scrs.length;i++){
@@ -124,11 +138,14 @@ async function build(){
 		let as = document.getElementsByTagName("a");
 		for(let i=0;i<as.length;i++){
 			if(as[i].href.indexOf("http") != 0){
-				as[i].setAttribute("onclick", `document.body.style.opacity = 0;setTimeout(()=>{clearNavigation('${as[i].href}');document.body.style.opacity = 1;}, 300);`);
+				if(as[i].href == ""){
+					throw "HREF missing in "+files[i]
+				}
+				as[i].setAttribute("onclick", `clearNavigation('${as[i].href}');`);
 				as[i].removeAttribute("href");
 				//as[i].setAttribute("href", "#");
 			} else {
-				as[i].classList.add("ext_warn");
+				if(psc["external-warnings"]) as[i].classList.add("ext_warn");
 			}
 		}
 		

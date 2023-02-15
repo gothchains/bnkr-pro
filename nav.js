@@ -1,21 +1,25 @@
 let keybindState = [];
 let quirkMode = 0;
+let historyStack = {
+    "back": [],
+    "front": [],
+    "current": "index.html"
+}
 function executeScriptElements(containerElement) {
     const scriptElements = containerElement.querySelectorAll("script");
-
     Array.from(scriptElements).forEach((scriptElement) => {
         const clonedElement = document.createElement("script");
-
         Array.from(scriptElement.attributes).forEach((attribute) => {
             clonedElement.setAttribute(attribute.name, attribute.value);
         });
-
         clonedElement.text = scriptElement.text;
-
         scriptElement.parentNode.replaceChild(clonedElement, scriptElement);
     });
 }
-function clearNavigation(h) {
+async function clearNavigation(h,dnu) {
+    document.body.style.opacity = 0;
+    if(dnu==undefined||dnu.transition!=false) await new Promise(r => setTimeout(r, 300));
+    let tz = h;
     if (h[0] != "/") h = "/" + h;
     if (window.navigation[h] == undefined) {
         alert("Link is invalid");
@@ -44,9 +48,34 @@ function clearNavigation(h) {
     let nav = document.createElement("style");
     nav.innerHTML = `a[onclick]{cursor:pointer;}.ext_warn:before{content: '⚠️↗ ';}`;
     document.head.appendChild(nav);
+    if(dnu==undefined||dnu.history!=false){    
+        historyStack.front = [];
+        historyStack.back.push(historyStack.current);
+        historyStack.current = tz;
+    }
     executeScriptElements(document.getElementById("pseudobody"));
     delete p;
+    document.body.style.opacity = 1;
     return true;
+}
+function historyMode(m){
+    if(m=="back" && historyStack.back.length > 0){
+        console.log(historyStack);
+        let t = historyStack.back.pop();
+        historyStack.front.push(historyStack.current);
+        historyStack.current = t;
+        clearNavigation(t, {
+            "history": false
+        });
+    } else if(m=="forward" && historyStack.front.length > 0){
+        console.log(historyStack);
+        let t = historyStack.front.pop();
+        historyStack.back.push(historyStack.current);
+        historyStack.current = t;
+        clearNavigation(t, {
+            "history": false
+        });
+    }
 }
 document.addEventListener("keydown", (e) => {
     if (window.config.defaultPanic != undefined) {
@@ -89,4 +118,21 @@ cmp = document.createElement("script");
 cmp.innerHTML = window.contentCache["libs/notif.js"];
 cmp.setAttribute("tracking-src", "libs/notif.js");
 document.getElementById("permanent").appendChild(cmp);
-clearNavigation("index.html");
+const container = document.getElementById('cmdho')
+    const commandPalette = new LunaCommandPalette(container, {
+    placeholder: 'Type a command',
+    shortcut: 'Ctrl+Shift+P',
+    commands: [
+        {
+            title: "Quick Navigate: Index",
+            handler(){
+                clearNavigation("index.html");
+            }
+        }
+    ]
+    })
+    //commandPalette.show();
+clearNavigation("index.html",{
+    "history": false,
+    "transition": false
+});
