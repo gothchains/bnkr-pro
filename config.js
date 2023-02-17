@@ -8,12 +8,6 @@ module.exports = {
         "css": true,
         "js": true
     },
-    "defaultPanic": [
-        "Control",
-        "Shift",
-        "Q"
-    ],
-    "defaultPanicAction": "location.href = 'https://classroom.google.com/u/2/';",
     "minifyJS": true,
     "minifyCSS": true,
     "htmlOptions": {
@@ -21,5 +15,19 @@ module.exports = {
         "removeComments": true,
         "sortClassName": true,
         "useShortDoctype": true
+    },
+    "user": {
+        "forceTitle": "",
+        "forceFavicon": {
+            "type": "remote",
+            "path": ""
+        },    
+        "panic": [
+            "Control",
+            "Shift",
+            "Q"
+        ],
+        "panicAction": "location.href = 'https://classroom.google.com/u/2/';",
+        "frameMode": "iframe" //iframe, embed, object
     }
 }

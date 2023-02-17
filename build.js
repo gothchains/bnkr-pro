@@ -155,22 +155,22 @@ async function build(){
 
 		//config forcer
 
-		if(config.forceTitle != ""){
-			document.title = config.forceTitle;
+		if(config.user.forceTitle != ""){
+			document.title = config.user.forceTitle;
 		}
-		if(config.forceFavicon.path != ""){
+		if(config.user.forceFavicon.path != ""){
 			let icons = document.getElementsByTagName("link");
 			let cd = false;
 			for(let i=0;i<icons.length;i++){
 				if(icons[i].rel == "icon"){
-					icons[i].href = config.forceFavicon.path;
+					icons[i].href = config.user.forceFavicon.path;
 					cd=true;
 				}
 			}
 			if(!cd){
 				let fav = document.createElement("link");
 				fav.rel = "icon",
-				fav.href= config.forceFavicon.path;
+				fav.href= config.user.forceFavicon.path;
 				document.head.appendChild(fav);
 				delete fav;
 			}

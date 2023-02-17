@@ -5,6 +5,7 @@ let historyStack = {
     "front": [],
     "current": "index.html"
 }
+let queryParams = {};
 function executeScriptElements(containerElement) {
     const scriptElements = containerElement.querySelectorAll("script");
     Array.from(scriptElements).forEach((scriptElement) => {
@@ -19,6 +20,11 @@ function executeScriptElements(containerElement) {
 async function clearNavigation(h,dnu) {
     document.body.style.opacity = 0;
     if(dnu==undefined||dnu.transition!=false) await new Promise(r => setTimeout(r, 300));
+    if(dnu!=undefined&&dnu.queryParams != undefined){
+        queryParams = dnu.queryParams;
+    } else {
+        queryParams={};
+    }
     let tz = h;
     if (h[0] != "/") h = "/" + h;
     if (window.navigation[h] == undefined) {
@@ -60,7 +66,6 @@ async function clearNavigation(h,dnu) {
 }
 function historyMode(m){
     if(m=="back" && historyStack.back.length > 0){
-        console.log(historyStack);
         let t = historyStack.back.pop();
         historyStack.front.push(historyStack.current);
         historyStack.current = t;
@@ -68,7 +73,6 @@ function historyMode(m){
             "history": false
         });
     } else if(m=="forward" && historyStack.front.length > 0){
-        console.log(historyStack);
         let t = historyStack.front.pop();
         historyStack.back.push(historyStack.current);
         historyStack.current = t;
@@ -78,12 +82,12 @@ function historyMode(m){
     }
 }
 document.addEventListener("keydown", (e) => {
-    if (window.config.defaultPanic != undefined) {
-        if (window.config.defaultPanic[keybindState.length] == e.key) {
+    if (window.config.user.panic != undefined) {
+        if (window.config.user.panic[keybindState.length] == e.key) {
             keybindState.push(e.key);
-            if (keybindState.length == window.config.defaultPanic.length) {
+            if (keybindState.length == window.config.user.panic.length) {
                 keybindState = [];
-                eval(window.config.defaultPanicAction);
+                eval(window.config.user.panicAction);
             }
         }
     }
@@ -118,20 +122,44 @@ cmp = document.createElement("script");
 cmp.innerHTML = window.contentCache["libs/notif.js"];
 cmp.setAttribute("tracking-src", "libs/notif.js");
 document.getElementById("permanent").appendChild(cmp);
-const container = document.getElementById('cmdho')
-    const commandPalette = new LunaCommandPalette(container, {
-    placeholder: 'Type a command',
-    shortcut: 'Ctrl+Shift+P',
-    commands: [
-        {
-            title: "Quick Navigate: Index",
-            handler(){
-                clearNavigation("index.html");
-            }
+const container = document.getElementById('cmdho');
+const commandPalette = new LunaCommandPalette(container, {
+theme: "Dark",
+placeholder: 'Type a command',
+shortcut: 'Ctrl+Shift+P',
+commands: [
+    {
+        title: "Go to Index",
+        handler(){
+            clearNavigation("index.html");
         }
-    ]
-    })
-    //commandPalette.show();
+    },
+    {
+        title: "Go to Debug Page",
+        handler(){
+            clearNavigation("info.html");
+        }
+    },
+    {
+        title: "Go to Games",
+        handler(){
+            clearNavigation("game.html");
+        }
+    },
+    {
+        title: "Backward Page",
+        handler(){
+            historyMode("back");
+        }
+    },
+    {
+        title: "Forward Page",
+        handler(){
+            historyMode("forward");
+        }
+    },
+]
+});
 clearNavigation("index.html",{
     "history": false,
     "transition": false

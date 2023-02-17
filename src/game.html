@@ -9,8 +9,8 @@
         <div>
         <h1 id="g4mes">G4MES</h1>
     <label>Open in </label><select id="act">
-        <option value="nt">New Tab</option>
         <option value="if">Iframer</option>
+        <option value="nt">New Tab</option>
         <option value="cu">Copy URL</option>
     </select>
 <h1 id="browser-based">Browser-Based</h1>
@@ -982,45 +982,52 @@
             </ul>
         </div>
         <script>
-            function copyTextToClipboard(text) {
-              var textArea = document.createElement("textarea");
-              textArea.style.position = 'fixed';
-              textArea.style.top = 0;
-              textArea.style.left = 0;
-              textArea.style.width = '2em';
-              textArea.style.height = '2em';
-              textArea.style.padding = 0;
-              textArea.style.border = 'none';
-              textArea.style.outline = 'none';
-              textArea.style.boxShadow = 'none';
-              textArea.style.background = 'transparent';
-              textArea.value = text;
-              document.body.appendChild(textArea);  
-              textArea.focus();
-              textArea.select();
-              try {
-                var successful = document.execCommand('copy');
-              } catch (err) {
-                  alert("failed to copy to clipboard, try right-click + copy link address");
-                console.log(`f: `+err);
-              }
-              document.body.removeChild(textArea);
-            }
-            let as = document.getElementsByTagName("a");
-            for(let i=0;i<as.length;i++){
-                as[i].addEventListener("click", (e) => {
-                    e.preventDefault();
-                    console.log(e.srcElement.href);
-                    let act = document.getElementById("act").value;
-                    if(act == "nt"){
-                        window.open(e.srcElement.href, "_blank")
-                    } else if(act == "cu"){
-                        copyTextToClipboard(e.srcElement.href);
-                    } else {
-                        alert("sorry, haven't implemented that yet");
-                    }
-                });
-            }
+            (function(){
+                function copyTextToClipboard(text) {
+                var textArea = document.createElement("textarea");
+                textArea.style.position = 'fixed';
+                textArea.style.top = 0;
+                textArea.style.left = 0;
+                textArea.style.width = '2em';
+                textArea.style.height = '2em';
+                textArea.style.padding = 0;
+                textArea.style.border = 'none';
+                textArea.style.outline = 'none';
+                textArea.style.boxShadow = 'none';
+                textArea.style.background = 'transparent';
+                textArea.value = text;
+                document.body.appendChild(textArea);  
+                textArea.focus();
+                textArea.select();
+                try {
+                    var successful = document.execCommand('copy');
+                } catch (err) {
+                    alert("failed to copy to clipboard, try right-click + copy link address");
+                    console.log(`f: `+err);
+                }
+                document.body.removeChild(textArea);
+                }
+                let as = document.getElementsByTagName("a");
+                for(let i=0;i<as.length;i++){
+                    as[i].addEventListener("click", (e) => {
+                        e.preventDefault();
+                        let act = document.getElementById("act").value;
+                        if(act == "nt"){
+                            window.open(e.srcElement.href, "_blank")
+                        } else if(act == "cu"){
+                            copyTextToClipboard(e.srcElement.href);
+                        } else if(act == "if"){
+                            clearNavigation("frame.html",{
+                                queryParams: {
+                                    furl: e.srcElement.href
+                                }
+                            })
+                        } else {
+                            alert("sorry, haven't implemented that yet");
+                        }
+                    });
+                }
+            })();
         </script>
     </body>
 </html>

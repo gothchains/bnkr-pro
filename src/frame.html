@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>$config.title</title>
+	<link rel="stylesheet" href="style.css">
+	<style>
+		#frameholder>*{
+			height: 100%;
+			width: 100%;
+			position: absolute;
+			border: 0px;
+		}
+		div>button{
+			background-color: black;
+			border-radius: 5px;
+			color: white;
+			margin-right: 4px;
+			margin-top: 4px;
+		}
+	</style>
+</head>
+
+<body>
+	<div style="position: absolute; top: 0px; right: 0px; z-index: 99;">
+		<button onclick="commandPalette.show();">X</button>
+	</div>
+	<div id="frameholder">
+
+	</div>
+	<script>
+		if(queryParams.furl != undefined){
+			fInt(queryParams.furl);
+		} else {
+			let u = window.prompt("url: ");
+			if(u!=null&&u!=""){
+				fInt(u);
+			} else {
+				historyMode("back");
+			}
+		}
+		function fInt(u){
+			if(u.indexOf("http") != 0) u = "https://"+u;
+			let f = document.createElement(window.config.user.frameMode);
+			if(window.config.user.frameMode == "object"){
+				f.setAttribute("data", u);
+			} else {
+				f.setAttribute("src", u);
+			}
+			document.getElementById("frameholder").appendChild(f);
+		}
+	</script>
+</body>
+
+</html>
