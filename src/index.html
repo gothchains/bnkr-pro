@@ -9,7 +9,7 @@
 <body>
 	<div class="vert-bar-nav">
 		<div>
-			<a href="test/test.html">
+			<a href="test/test.html" data-cooltipz-dir="right" aria-label="Build Test">
 				<svg class="navsvg" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
 					xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
 					fill="#000000">
@@ -42,7 +42,7 @@
 				</svg>
 			</a>
 		</div>
-		<div>
+		<div data-cooltipz-dir="right" aria-label="Games and Entertainment">
 			<a href="game.html">
 				<svg class="navsvg" version="1.1" id="_x32_" xmlns="http://www.w3.org/2000/svg"
 					xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 512 512" xml:space="preserve"
@@ -79,7 +79,7 @@
 				</svg>
 			</a>
 		</div>
-		<div>
+		<div data-cooltipz-dir="right" aria-label="Iframer">
 			<a href="frame.html">
 				<svg class="navsvg" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
 					stroke="#ffffff" stroke-width="0.00024000000000000003">
@@ -110,7 +110,7 @@
 				</svg>
 			</a>
 		</div>
-		<div>
+		<div data-cooltipz-dir="right" aria-label="Version Information">
 			<a href="info.html">
 				<svg class="navsvg" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
 					<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -129,7 +129,7 @@
 				</svg>
 			</a>
 		</div>
-		<div>
+		<div data-cooltipz-dir="right" aria-label="Settings">
 			<a href="test/test.html">
 				<svg class="navsvg" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg"
 					xmlns:xlink="http://www.w3.org/1999/xlink" fill="#000000">
@@ -152,7 +152,7 @@
 				</svg>
 			</a>
 		</div>
-		<div>
+		<div data-cooltipz-dir="right" aria-label="Music">
 			<a href="test/test.html">
 				<svg class="navsvg" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
 					stroke="#ffffff" stroke-width="0.00024000000000000003">
@@ -166,8 +166,8 @@
 				</svg>
 			</a>
 		</div>
-		<div>
-			<a href="test/test.html">
+		<div data-cooltipz-dir="right" aria-label="Discord Chat">
+			<a href="discord.html">
 				<svg class="navsvg" fill="#ffffff" viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
 					stroke="#ffffff" stroke-width="0.00032">
 					<g id="SVGRepo_bgCarrier" stroke-width="0"></g>
@@ -194,7 +194,7 @@
 				</svg>
 			</a>
 		</div>
-		<div>
+		<div data-cooltipz-dir="right" aria-label="Help">
 			<a href="test/test.html">
 				<svg class="navsvg" xmlns="http://www.w3.org/2000/svg" fill="#ffffff" viewBox="0 0 24 24"
 					stroke="#ffffff" stroke-width="0.00024000000000000003">
@@ -208,7 +208,7 @@
 				</svg>
 			</a>
 		</div>
-		<div>
+		<div data-cooltipz-dir="right" aria-label="School Help">
 			<a href="test/test.html">
 				<svg class="navsvg" fill="#ffffff" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"
 					stroke="#ffffff" stroke-width="0.00024000000000000003">
@@ -222,6 +222,15 @@
 				</svg>
 			</a>
 		</div>
+	</div>
+	<div class="minfo">
+		<h1>bunker</h1>
+		<p><span>Control+Shift+P</span> for utilites</p>
+		<p><span id="dePanic"></span> in case of panic</p>
+		<script>
+			
+			document.getElementById("dePanic").textContent = window.config.user.panic.join("+");
+		</script>
 	</div>
 	<div class="bottom-versioning">
 		<p>Protocol: `file://`</p>

@@ -1,6 +1,6 @@
 # Bunker PRO
 ###### The orignal bunker: updated
-todo: interface, commands
+todo: help popup, chat icon, settings icon/page, music player (seperate component + visualizer?)
 ### Features
 - Over 5 different launching methods: file, about:blank, and a few secret ones, including one that doesn't even require a single file.
 - Stealth: Employing the latest and greatest techniques and failsafes to keep you hidden no matter what.

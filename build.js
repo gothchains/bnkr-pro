@@ -246,7 +246,7 @@ async function build(){
 	//config import
 	nav = dom.window.document.createElement("script");
 	nav.innerHTML = `window.config = ${JSON.stringify(Object.assign(config, vcfg))}`;
-	dom.window.document.body.appendChild(nav);
+	dom.window.document.body.insertBefore(nav,dom.window.document.body.firstChild);
 	let raw = dom.serialize();
 	raw = minify(raw, {
 		minifyCSS: config.minifyCSS,
