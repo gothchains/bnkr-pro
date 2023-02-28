@@ -184,7 +184,8 @@ async function build(){
 	let libs = [
 		"libs/cmd.js",
 		"libs/notif.js",
-		"libs/ln.css"
+		"libs/ln.css",
+		"libs/json.js"
 	];
 
 	for(let i in libs){

@@ -100,14 +100,6 @@ document.addEventListener("keyup", (e) => {
 setInterval(() => {
     // check quirk mode
     if (!quirkMode && document.compatMode == "BackCompat") {
-        const container = document.getElementById('ntf');
-        const notification = new LunaNotification(container, {
-            position: {
-                x: 'right',
-                y: 'top',
-            },
-            theme: "dark"
-        });
         notification.notify('Possible Error: Document in Quirks Mode', {
             duration: 2000,
         });
@@ -122,7 +114,19 @@ cmp = document.createElement("script");
 cmp.innerHTML = window.contentCache["libs/notif.js"];
 cmp.setAttribute("tracking-src", "libs/notif.js");
 document.getElementById("permanent").appendChild(cmp);
-const container = document.getElementById('cmdho');
+cmp = document.createElement("script");
+cmp.innerHTML = window.contentCache["libs/json.js"];
+cmp.setAttribute("tracking-src", "libs/json.js");
+document.getElementById("permanent").appendChild(cmp);
+let container = document.getElementById('ntf');
+const notification = new LunaNotification(container, {
+    position: {
+        x: 'right',
+        y: 'top',
+    },
+    theme: "dark"
+});
+container = document.getElementById('cmdho');
 const commandPalette = new LunaCommandPalette(container, {
 theme: "Dark",
 placeholder: 'Type a command',

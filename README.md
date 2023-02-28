@@ -7,6 +7,7 @@ todo: help popup, chat icon, settings icon/page, music player (seperate componen
 - Exploit Manager: Easily discover and apply the newest cracks and exploits from the unblocking community, so that you can use your computer to the fullest potential. All without technical knowlege.
 - Game Assortment: A game library so good you'll continue to browse, even after you unblock your entire device.
 - Customizable: Employ the newest compiling procedure so you can tweak anything to your liking.
+- Performance: Monitor and control CPU and RAM/Memory usage
 - Size: Bunker PRO is a single HTML file less than a tiny 5KB!
 - File extension: Choose between a .html or a .htm to futher confuse spying eyes.
 - Navigation Virtualization: Bunker PRO uses the latest techniques to capture and suppress navigation events and uses PseudoBody™ technology.

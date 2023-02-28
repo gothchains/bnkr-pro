@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    
+    <body>
+        <div style="padding: 1em;">
+            <p id="bn">Build Number Build Checksum</p>
+            <p>click on <span style="color:red;">red</span> or <span style="color:blue;">blue</span> items to change them, then hit save</p>
+            <div id="jseditcontainer"></div>
+            <button onclick="save();">save</button>
+        </div>
+        <script>
+            function save(){
+                window.config = jsoneditor.value;
+                notification.notify("Saved", {
+                    duration: 1000
+                })
+            }
+            document.getElementById("bn").textContent = config.buildId+" "+config.checksum+" "+config.buildDate;
+            const jsoneditor = new LunaJsonEditor(document.getElementById("jseditcontainer"), {
+                name: "settings",
+                value: window.config,
+                nameEditable: false,
+                enableInsert: false,
+                enableDelete: false
+            });
+            jsoneditor.expand(true);
+        </script>
+    </body>
+</html>

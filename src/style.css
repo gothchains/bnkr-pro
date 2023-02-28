@@ -150,3 +150,17 @@ p{
     -webkit-text-fill-color: transparent;
     display: inline-block;
 }
+@keyframes tick{
+    0%{
+        transform: scale(1);
+    }
+    90%{
+        transform: scale(1.2);
+    }
+    100%{
+        transform: scale(1.14);
+    }
+}
+.flphvr:hover{
+    animation: tick 0.2s forwards ease-in-out;
+}
