@@ -10,6 +10,7 @@ const fsp = require('fs').promises;
 const path = require('path');
 const config = require("./config");
 let lastTime = new Date().getTime();
+let tbt = lastTime;
 function tim(e){
 	let timeDelta = new Date().getTime() - lastTime;
 	lastTime = new Date().getTime();
@@ -276,7 +277,7 @@ async function build(){
 	fs.writeFileSync(__dirname+"/"+dist+"/index.html", raw);
 	fs.writeFileSync(__dirname+"/builds.txt", (buildId+1)+"");
 	tim("finish write");
-	console.log(`Finished building to '${dist}/index.html'. Total size: ${raw.length/1000}kb`);
+	console.log(`Finished building to '${dist}/index.html'. Total size: ${raw.length/1000}kb, ${new Date().getTime()-tbt}Δms`);
 }
 tim("finished loading");
 build();
