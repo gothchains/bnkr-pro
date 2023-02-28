@@ -9,7 +9,14 @@ var minify = require('html-minifier').minify;
 const fsp = require('fs').promises;
 const path = require('path');
 const config = require("./config");
+let lastTime = new Date().getTime();
+function tim(e){
+	let timeDelta = new Date().getTime() - lastTime;
+	lastTime = new Date().getTime();
+	if(config.buildTimingOutput) console.log(`timing (${timeDelta}Δms): ${e}`);
+}
 let buildId = parseInt(fs.readFileSync(__dirname+"/builds.txt", "utf-8"));
+tim("loaded build id");
 async function walk(dir) {
     let files = await fsp.readdir(dir);
     files = await Promise.all(files.map(async file => {
@@ -18,7 +25,6 @@ async function walk(dir) {
         if (stats.isDirectory()) return walk(filePath);
         else if(stats.isFile()) return filePath;
     }));
-
     return files.reduce((all, folderContents) => all.concat(folderContents), []);
 }
 async function build(){
@@ -30,16 +36,19 @@ async function build(){
 	if(dist == undefined){
 		dist = "dist"
 	}
-	console.log(`Building from path '${bunker}' with config: 'config.js' to output '${dist}'`);
+	console.log(`Building buildId:${buildId} from path '${bunker}' with config: 'config.js' to output '${dist}'`);
 	let htmls = [];
 	let contentCache = {};
+	tim("start walk")
 	let files = await walk(__dirname+"/"+bunker);
+	tim("end walk");
 	for(let i in files){
 		files[i] = files[i].replace(/\\/g, "/");
 		files[i] = files[i].split(__dirname.replace(/\\/g, "/")+"/"+bunker)[1];
 	}
 	for(let i in files){
 		let lp = files[i].replace("/","").split("/")
+		tim("start page parse "+files[i]);
 		lp.pop();
 		lp=lp.join("/");
 		if(lp!=""){
@@ -177,8 +186,9 @@ async function build(){
 		}
 
 		htmls[files[i]] = dom.serialize();
+		tim("end page parse");
 	}
-
+	tim("being loader setup");
 	// force manual lib entry even if dynamic asset loader doesn't
 
 	let libs = [
@@ -198,16 +208,19 @@ async function build(){
 	// add compiled files to load on index.html
 
 	let navigation = {};
+	tim("start navigation builder")
 	for(let i in htmls){
 		let html = htmls[i];
 		let dom = new JSDOM(html);
 		navigation[i] = [];
 		navigation[i][0] =  dom.window.document.head.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
 		navigation[i][1] =  dom.window.document.body.innerHTML.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		tim(`nav ${i} at ${html.length/1000}kb`);
 		console.log(`navigation: ${i} (${html.length}b)`);
 	}
 	let dom = new JSDOM(htmls["/loader.html"]);
 	
+	tim("inject scripts");
 	//versioning inject
 	let vcfg = {
 		"version": version,
@@ -225,6 +238,7 @@ async function build(){
 	nav.innerHTML = `window.contentCache = ${JSON.stringify(contentCache)}`;
 	dom.window.document.body.appendChild(nav);
 
+	tim("navscript");
 	//navigation handler import
 	nav = dom.window.document.createElement("script");
 	let njs = fs.readFileSync(__dirname+"/nav.js", "utf-8");
@@ -244,10 +258,12 @@ async function build(){
 	nav.innerHTML = `a[onclick]{cursor:pointer;}`;
 	dom.window.document.head.appendChild(nav);
 
+	tim("confg");
 	//config import
 	nav = dom.window.document.createElement("script");
 	nav.innerHTML = `window.config = ${JSON.stringify(Object.assign(config, vcfg))}`;
 	dom.window.document.body.insertBefore(nav,dom.window.document.body.firstChild);
+	tim("serialize + minify");
 	let raw = dom.serialize();
 	raw = minify(raw, {
 		minifyCSS: config.minifyCSS,
@@ -256,8 +272,11 @@ async function build(){
 		sortClassName: config.htmlOptions.sortClassName,
 		useShortDoctype: config.htmlOptions.useShortDoctype
 	});
+	tim("inject finished, begin write");
 	fs.writeFileSync(__dirname+"/"+dist+"/index.html", raw);
 	fs.writeFileSync(__dirname+"/builds.txt", (buildId+1)+"");
+	tim("finish write");
 	console.log(`Finished building to '${dist}/index.html'. Total size: ${raw.length/1000}kb`);
 }
+tim("finished loading");
 build();

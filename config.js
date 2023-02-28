@@ -8,6 +8,7 @@ module.exports = {
         "css": true,
         "js": true
     },
+    "buildTimingOutput": true,
     "minifyJS": true,
     "minifyCSS": true,
     "htmlOptions": {
