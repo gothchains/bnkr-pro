@@ -1,5 +1,8 @@
 let keybindState = [];
 let quirkMode = 0;
+let intervals = [];
+let navigationId = "";
+let nonSandboxedExecutionStatus = {};
 let historyStack = {
     "back": [],
     "front": [],
@@ -25,6 +28,10 @@ async function clearNavigation(h,dnu) {
     } else {
         queryParams={};
     }
+    for(let i in intervals){
+        clearTimeout(intervals[i]);
+    }
+    navigationId = Date.now().toString(36) + Math.random().toString(36).substr(2);
     let tz = h;
     if (h[0] != "/") h = "/" + h;
     if (window.navigation[h] == undefined) {

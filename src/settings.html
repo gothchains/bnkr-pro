@@ -16,7 +16,8 @@
                 window.config = jsoneditor.value;
                 notification.notify("Saved", {
                     duration: 1000
-                })
+                });
+                
             }
             document.getElementById("bn").textContent = config.buildId+" "+config.checksum+" "+config.buildDate;
             const jsoneditor = new LunaJsonEditor(document.getElementById("jseditcontainer"), {

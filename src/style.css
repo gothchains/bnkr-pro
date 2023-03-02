@@ -25,6 +25,12 @@ p{
     font-family: Arial, Helvetica, sans-serif;
     margin: 0px;
 }
+li{
+    color: white;
+}
+label{
+    color: white;
+}
 .hd{
     display: flex;
     align-items: center;

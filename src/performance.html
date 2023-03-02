@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div style="padding: 1em;">
+        <p>Something look off? Webpages (especially those under special schemes, like bunker) have no access to device information. All the shown values are estimated</p>
+        <p>Memory Managment will likely come in a later update</p>
+        <progress value="0" max="100"></progress><label id="freq"></label>
+        <br>
+        <progress value="0" max="8000"></progress><label id="memory">0 MB</label>
+        <br>
+        <p>CPU info:</p>
+        <ul>
+            <li>Logic Cores/Threads: <span id="cores">UKN</span></li>
+        </ul>
+        <p>GPU info:</p>
+        <ul>
+            <li>GPU: <span id="gpu">UKN</span></li>
+        </ul>
+    </div>
+    <canvas id="glcanvas" width="0" height="0"></canvas>
+    <script>
+        let fc = 0;
+        function f(){fc++;requestAnimationFrame(f);}
+        requestAnimationFrame(f);
+        intervals.push(setInterval(function(){
+            fc=0;
+        }, 1000));
+        function b(i, v) {
+            document.getElementById(i).textContent = v;
+        }
+        function getUnmaskedInfo() {
+            var canvas;
+            canvas = document.getElementById("glcanvas");
+            var gl = canvas.getContext("experimental-webgl");
+            var unMaskedInfo = {
+                renderer: '',
+                vendor: ''
+            };
+
+            var dbgRenderInfo = gl.getExtension("WEBGL_debug_renderer_info");
+            if (dbgRenderInfo != null) {
+                unMaskedInfo.renderer = gl.getParameter(dbgRenderInfo.UNMASKED_RENDERER_WEBGL);
+                unMaskedInfo.vendor = gl.getParameter(dbgRenderInfo.UNMASKED_VENDOR_WEBGL);
+            }
+
+            return unMaskedInfo;
+        }
+        function cpufreq() {
+            var _speedconstant = 8.9997e-9;
+            var d = new Date();
+            var amount = 150000000;
+            var estprocessor = 0.5;
+            for (var i = amount; i > 0; i--) { }
+            var newd = new Date();
+            var accnewd = Number(String(newd.getSeconds()) + "." + String(newd.getMilliseconds()));
+            var accd = Number(String(d.getSeconds()) + "." + String(d.getMilliseconds()));
+            var di = accnewd - accd;
+            if (d.getMinutes() != newd.getMinutes()) {
+                di = (60 * (newd.getMinutes() - d.getMinutes())) + di
+            }
+            spd = ((_speedconstant * amount) / di);
+            return Math.round(spd * 1000) / 1000;
+        }
+        function tickCounters() {
+            let util = cpufreq();
+            b("freq", util+"%");
+            b("cores", navigator.hardwareConcurrency);
+            b("gpu", getUnmaskedInfo().renderer);
+            b("memory", console.memory.usedJSHeapSize/1000000+" MB");
+            document.getElementsByTagName("progress")[0].max = 100;
+            document.getElementsByTagName("progress")[0].value = util;
+            document.getElementsByTagName("progress")[1].max = console.memory.jsHeapSizeLimit;
+            document.getElementsByTagName("progress")[1].value = console.memory.usedJSHeapSize;
+        }
+        intervals.push(setInterval(tickCounters, 2000));
+        tickCounters();
+    </script>
+</body>
+
+</html>

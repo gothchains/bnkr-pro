@@ -265,6 +265,7 @@ async function build(){
 	nav.innerHTML = `window.config = ${JSON.stringify(Object.assign(config, vcfg))}`;
 	dom.window.document.body.insertBefore(nav,dom.window.document.body.firstChild);
 	tim("serialize + minify");
+	dom.window.document.body.setAttribute("lang", "en-US");
 	let raw = dom.serialize();
 	raw = minify(raw, {
 		minifyCSS: config.minifyCSS,
