@@ -31,7 +31,9 @@ async function clearNavigation(h,dnu) {
     for(let i in intervals){
         clearTimeout(intervals[i]);
     }
+    nonSandboxedExecutionStatus[navigationId] = "terminated";
     navigationId = Date.now().toString(36) + Math.random().toString(36).substr(2);
+    nonSandboxedExecutionStatus[navigationId] = "running";
     let tz = h;
     if (h[0] != "/") h = "/" + h;
     if (window.navigation[h] == undefined) {
