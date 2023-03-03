@@ -1,4 +1,5 @@
 module.exports = {
+	"outputFile": "index.html",
     "forceTitle": "",
     "forceFavicon": {
         "type": "remote",
@@ -8,6 +9,9 @@ module.exports = {
         "css": true,
         "js": true
     },
+    "disabledModules": [
+        "/cheat/"
+    ],
     "buildTimingOutput": true,
     "minifyJS": true,
     "minifyCSS": true,

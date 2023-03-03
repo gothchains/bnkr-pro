@@ -8,7 +8,12 @@ const axios = require("axios");
 var minify = require('html-minifier').minify;
 const fsp = require('fs').promises;
 const path = require('path');
-const config = require("./config");
+let config;
+if(process.argv[4]=="syscall"){
+	config = require("./tmpconf");
+} else {
+	config = require("./config");
+}
 let lastTime = new Date().getTime();
 let tbt = lastTime;
 function tim(e){
@@ -54,6 +59,10 @@ async function build(){
 		lp=lp.join("/");
 		if(lp!=""){
 			lp="/"+lp+"/";
+		}
+		if(config.disabledModules.indexOf(lp) != -1){
+			tim("ignored disabled module "+lp);
+			continue;
 		}
 		if(files[i].split(".")[files[i].split(".").length-1] != "html"){
 			continue;
@@ -275,10 +284,10 @@ async function build(){
 		useShortDoctype: config.htmlOptions.useShortDoctype
 	});
 	tim("inject finished, begin write");
-	fs.writeFileSync(__dirname+"/"+dist+"/index.html", raw);
+	fs.writeFileSync(__dirname+"/"+dist+"/"+config.outputFile, raw);
 	fs.writeFileSync(__dirname+"/builds.txt", (buildId+1)+"");
 	tim("finish write");
-	console.log(`Finished building to '${dist}/index.html'. Total size: ${raw.length/1000}kb, ${new Date().getTime()-tbt}Δms`);
+	console.log(`Finished building to '${dist}/${config.outputFile}'. Total size: ${raw.length/1000}kb, ${new Date().getTime()-tbt}Δms`);
 }
 tim("finished loading");
 build();
