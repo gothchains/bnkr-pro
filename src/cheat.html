@@ -6,6 +6,13 @@
 </head>
 
 <body>
+    <script>
+        if(config.disabledModules.indexOf("/cheat/") != -1){
+            alert(`This build of bunker (${config.buildName}-${config.buildModifier}) has this module (cheats) disabled`);
+            document.body.style.opacity = 0;
+            historyMode("back");
+        }
+    </script>
     <div style="padding: 1em;">
         <p>good luck.</p>
         <ul>

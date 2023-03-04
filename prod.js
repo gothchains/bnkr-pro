@@ -7,7 +7,8 @@ let targets = [
         "outputFile": "cheatless.html",
         "disabledModules": [
             "/cheat/"
-        ]
+        ],
+        "buildModifier": "cheatless"
     }
 ];
 const fs = require("fs");

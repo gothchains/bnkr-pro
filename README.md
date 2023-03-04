@@ -14,7 +14,8 @@ todo: help popup, chat icon, settings icon/page, music player (seperate componen
 - Hidden from history: Completely hidden from history from launch to close.
 - Prebuilt options: Choose a simple install with just games, or pick a full featured Bunker PRO installation.
 - Active Community: With a expected development lifetime of a year, and a community support forever, Bunker PRO will last.
-- Downloading: In addtion to regular downloading, you can get Bunker PRO in two other methods that don't even show up in download history
+- Downloading: In addtion to regular downloading, you can get Bunker PRO in two other methods that don't even show up in download history.
+- Bookmarklet Manager: Full library of over 100 bookmarklets, with the newest method to easily add them in a single click **without ever copying them**.
 
 ### 🔥 Excited? Leave a ⭐ (top right corner)
 

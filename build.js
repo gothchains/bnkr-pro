@@ -2,7 +2,6 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 var UglifyJS = require("uglify-js");
 var md5 = require('md5');
-const version = "0.1-prelease";
 const fs = require("fs");
 const axios = require("axios");
 var minify = require('html-minifier').minify;
@@ -169,7 +168,7 @@ async function build(){
 		}
 		
 		if(files[i] == "/index.html"){
-			document.getElementById("v").textContent = "Bunker PRO version-"+version+" "+buildId+"-"+md5(buildId)+" on "+new Date().toLocaleString();
+			document.getElementById("v").textContent = "Bunker PRO version-"+config.buildName+"-"+config.buildModifier+" "+buildId+"-"+md5(buildId)+" on "+new Date().toLocaleString();
 		}
 
 		//config forcer
@@ -233,8 +232,9 @@ async function build(){
 	tim("inject scripts");
 	//versioning inject
 	let vcfg = {
-		"version": version,
+		"version": config.buildName,
 		"buildId": buildId,
+		"buildModifier": config.buildModifier,
 		"checksum": md5(buildId),
 		"buildDate": new Date().toLocaleString()
 	}

@@ -11,7 +11,7 @@
             <a href="index.html">Back to index</a>
         </div>
         <script>
-            document.getElementById("vn").textContent = window.config.version;
+            document.getElementById("vn").textContent = window.config.version+"-"+config.buildModifier;
             document.getElementById("bn").textContent = config.buildId+" "+config.checksum+" "+config.buildDate
         </script>
     </body>

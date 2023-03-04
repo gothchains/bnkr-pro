@@ -1,4 +1,6 @@
 module.exports = {
+    "buildName": "0.1-prelease",
+    "buildModifier": "base",
 	"outputFile": "index.html",
     "forceTitle": "",
     "forceFavicon": {
