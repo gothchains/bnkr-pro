@@ -11,9 +11,7 @@ module.exports = {
         "css": true,
         "js": true
     },
-    "disabledModules": [
-        "/cheat/"
-    ],
+    "disabledModules": [],
     "buildTimingOutput": true,
     "minifyJS": true,
     "minifyCSS": true,

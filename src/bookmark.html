@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <script>
+        if(config.disabledModules.indexOf("/bookmark/") != -1){
+            alert(`This build of bunker (${config.buildName}-${config.buildModifier}) has this module (bookmark) disabled`);
+            document.body.style.opacity = 0;
+            historyMode("back");
+        }
+    </script>
+    <div style="padding: 1em;">
+        
+    </div>
+</body>
+
+</html>

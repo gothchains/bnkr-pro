@@ -9,7 +9,14 @@ let targets = [
             "/cheat/"
         ],
         "buildModifier": "cheatless"
-    }
+    },
+    {
+        "outputFile": "bookmarkless.html",
+        "disabledModules": [
+            "/bookmark/"
+        ],
+        "buildModifier": "bookmarkless"
+    },
 ];
 const fs = require("fs");
 const exec = require('child_process').execSync;
