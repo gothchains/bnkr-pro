@@ -223,8 +223,8 @@
     --cooltipz-border-style:solid;
     --cooltipz-border-color:#1f1f1f;
     --cooltipz-text-color:#fff;
-    --cooltipz-font-size:0.75rem;
-    --cooltipz-font-family:verdana,geneva,tahoma,var(--cooltipz-fontawesome,Arial),sans-serif;
+    --cooltipz-font-size:0.8rem;
+    --cooltipz-font-family:Arial;
     --cooltipz-slide:6px;
     --cooltipz-border-radius:0.125rem;
     --cooltipz-timing:120ms;
@@ -283,7 +283,7 @@
     font-size:var(--cooltipz-font-size,.75rem);
     font-style:normal;
     font-weight:400;
-    padding:.5em 1em;
+    padding:.25em 0.5em;
     text-indent:0;
     text-shadow:none;
     white-space:nowrap;

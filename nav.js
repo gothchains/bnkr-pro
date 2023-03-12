@@ -38,6 +38,7 @@ async function clearNavigation(h,dnu) {
     if (h[0] != "/") h = "/" + h;
     if (window.navigation[h] == undefined) {
         alert("Link is invalid");
+        historyMode("back");
         return false;
     }
     h = window.navigation[h];
