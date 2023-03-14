@@ -59,7 +59,8 @@ async function build(){
 		if(lp!=""){
 			lp="/"+lp+"/";
 		}
-		if(config.disabledModules.indexOf(lp) != -1){
+		console.log("bruhhead goofy "+files[i]);
+		if(config.disabledModules.indexOf(lp) != -1 || config.disabledModules.indexOf(files[i]) != -1){
 			tim("ignored disabled module "+lp);
 			continue;
 		}

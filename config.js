@@ -1,8 +1,8 @@
 module.exports = {
-    "buildName": "0.1-prelease",
+    "buildName": "0.2-firstlease",
     "buildModifier": "base",
 	"outputFile": "index.html",
-    "forceTitle": "",
+    "forceTitle": "&zwj;",
     "forceFavicon": {
         "type": "remote",
         "path": ""

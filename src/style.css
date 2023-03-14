@@ -113,8 +113,7 @@ label{
     background-color:rgba(255, 255, 255, 0.233);
     border-radius: 0.3em;
     padding: 0.3em;
-    width: max-content;
-    width: 2.6em;
+    width: 2.45em;
 }
 .vert-bar-nav>div{
     width: max-content;
@@ -151,12 +150,17 @@ label{
 .minfo p{
     font-size: 1.4em;
 }
-.minfo span{
+.minfo span:not(.igc){
     background: linear-gradient(328deg, rgba(255,0,172,1) 0%, rgba(255,0,0,1) 100%);
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
+}
+.igc{
+    margin-top: 0.2em;
+    color: rgb(143, 143, 143);
+    font-size: 0.6em;
 }
 @keyframes tick{
     0%{

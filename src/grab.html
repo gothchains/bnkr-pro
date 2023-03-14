@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div style="padding: 1em;">
+        <h1>Bunker Intergrations</h1>
+        <p>Click "Open with Bunker Pro" on a supported site and check back here</p>
+        <p id="link">No link detected</p>
+        <script>
+            function setClipboard(text) {
+                const type = "text/plain";
+                const blob = new Blob([text], { type });
+                const data = [new ClipboardItem({ [type]: blob })];
+
+                navigator.clipboard.write(data);
+            }
+            //diff protocols to 
+            intervals.push(setInterval(function() {
+                navigator.clipboard.readText()
+                    .then(text => {
+                        console.log('Pasted content: ', text);
+                        if (text.indexOf("::b:") == 0) {
+                            setClipboard("");
+                            setClipboard("");
+                            setClipboard("");
+                            //write to link display tag
+                            document.getElementById("link").textContent = atob(text.split("::b:")[1]);
+                        }
+                    })
+                    .catch(err => {
+                        console.error('Failed to read clipboard contents: ', err);
+                    });
+            }, 500));
+        </script>
+    </div>
+</body>
+
+</html>

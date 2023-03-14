@@ -71,6 +71,7 @@ async function clearNavigation(h,dnu) {
     }
     executeScriptElements(document.getElementById("pseudobody"));
     delete p;
+    document.title = "‍";
     document.body.style.opacity = 1;
     return true;
 }
